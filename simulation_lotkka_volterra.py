@@ -2,16 +2,16 @@ import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt 
 from scipy.integrate import odeint 
-
+from sklearn.metrics import  mean_squared_error
 df = pd.read_csv("populations_lapins_renards.csv")
 df_cp = df.copy()
 df_cp["days"] = range(1, 1001)
 
 days = np.arange(0, 1001, 1 )
 
-alpha = 2/3 # taux de reproduction 
+alpha = 2/30 # taux de reproduction 
 beta = 4/3 # taux de mortalitée 
-delta = 1 # de reproduction des prédateurs 
+delta = 1/3 # de reproduction des prédateurs 
 gamma = 1 #taux de mortalitée des prédateurs 
 step = 0.001 
 time = [0]
@@ -38,13 +38,23 @@ for valo  in range(100_000):
     rabbit.append(dx)
     fox.append(dy)
 
-np_time = np.array(time)
-np_rabbit = np.array(rabbit)
-np_fox = np.array(fox)
+time = np.array(time)
+rabbit = np.array(rabbit)
+rabbit *= 1000
+fox = np.array(fox)
+fox *= 1000
+'''
+print(len(fox[1::100]))
+print(rabbit[::100])
+'''
+def MSE(approx, real):
+    
+    mse = np.mean((approx - real) ** 2)
+    return mse
 
-rabbit_1000 = [np_rabbit[::1000]]
-print((rabbit_1000*1000))
-  
+print("Method 0 :", MSE(rabbit[1::100],df_cp["lapin"]))
+    
+    
   
 #for value in range  ()    
 '''
@@ -52,7 +62,8 @@ plt.figure(figsize=(10,8))
 plt.plot(time, rabbit, color= "red")
 plt.plot(time, fox, color= "blue")
 plt.show()
- '''
+'''
+ 
         
         
     
